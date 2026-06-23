@@ -18,6 +18,7 @@ import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.views.PulleyInputSelection
 import com.freewheelin.pulley.legacy.views.PulleyInputSelectionListener
 import com.freewheelin.pulley.revision2023.viewmodel.RecommendSettingViewModel
+import androidx.lifecycle.ViewModelProvider
 
 class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionListener {
     private lateinit var binding: FragmentSubjectExcludeModifyBinding
@@ -34,6 +35,11 @@ class SnackTestSubjectExcludeModifyFragment : Fragment(), PulleyInputSelectionLi
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // 재생성(프로세스 사망/구성 변경) 시 newInstance 주입이 누락되므로, 부모(SnackTestRecommendSettingDialog)
+        // 스코프에서 공유 viewModel을 재획득한다. lateinit 미초기화 크래시 방어.
+        if (!::viewModel.isInitialized) {
+            viewModel = ViewModelProvider(requireParentFragment())[RecommendSettingViewModel::class.java]
+        }
         binding.apply {
             vm = viewModel
             lifecycleOwner = viewLifecycleOwner

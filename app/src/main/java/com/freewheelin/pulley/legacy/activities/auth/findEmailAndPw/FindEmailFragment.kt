@@ -151,6 +151,7 @@ class FindEmailFragment : Fragment() {
 
             API_V2.findEmail(name, phone).enqueue(object : Callback<Template<String>> {
                 override fun onFailure(call: Call<Template<String>>, t: Throwable) {
+                    if (!isAdded) return   // detach 후 콜백 도착 시 requireContext() 크래시 방어
                     responseFailed(requireContext(), t)
                 }
 
@@ -158,6 +159,7 @@ class FindEmailFragment : Fragment() {
                     call: Call<Template<String>>,
                     response: Response<Template<String>>
                 ) {
+                    if (!isAdded) return   // detach 후 콜백 도착 시 binding 접근 크래시 방어
                     val code = response.code()
                     when (code) {
                         200 -> {

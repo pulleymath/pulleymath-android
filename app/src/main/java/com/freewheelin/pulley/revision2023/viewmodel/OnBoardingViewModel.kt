@@ -41,7 +41,9 @@ class OnBoardingViewModel(application: Application) : BaseAndroidViewModel(appli
                 println("throwable HttpException 2 : ${throwable.code()} / ${throwable.message}")
             }
         }
-        goLoginActCallback()
+        if (::goLoginActCallback.isInitialized) {
+            goLoginActCallback()
+        }
     }
 
     fun fetchUser(cb: (UserV4) -> Unit) {

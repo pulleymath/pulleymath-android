@@ -230,10 +230,12 @@ class GuestLoginFragment : Fragment(),
             else {
                 API_V2.existId(view.text).enqueue(object: Callback<Template<String?>> {
                     override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
+                        if (!isAdded) return   // detach 후 콜백 도착 시 requireContext() 크래시 방어
                         responseFailed(requireContext(), t)
                     }
 
                     override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
+                        if (!isAdded) return   // detach 후 콜백 도착 시 binding/requireContext 크래시 방어
                         val httpCode = response.code()
                         val statusCode = response.body()?.data?:""
                         handleCheckIDResponse(httpCode, statusCode)

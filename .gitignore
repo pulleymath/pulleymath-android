@@ -179,6 +179,8 @@ fabric.properties
 /app/prod/
 
 .claude
+.omc/
+.omx/
 # 공개 스냅샷에서 제외되는 것들
 *.jks
 *.keystore

@@ -170,6 +170,7 @@ class MyChangePasswordFragment : MyPageBaseFragment() {
         DialogUtils.toLoginDialog(requireActivity(), {
             API_V2.signout().enqueue(object: Callback<Template<String?>> {
                 override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
+                    if (!isAdded) return   // detach 후 콜백(callback→requireActivity) 크래시 방어
                     Log.d(javaClass.simpleName, "로그아웃 성공")
                     MyApplication.token = ""
                     MyApplication.user?.token = ""
@@ -181,6 +182,7 @@ class MyChangePasswordFragment : MyPageBaseFragment() {
                 }
 
                 override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
+                    if (!isAdded) return   // detach 후 콜백(callback→requireActivity) 크래시 방어
                     Log.e(javaClass.simpleName, "로그아웃 실패")
                     callback(t.localizedMessage)
                 }

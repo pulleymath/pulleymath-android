@@ -666,10 +666,12 @@ class SignupFragment() : Fragment(), PasswordFieldV2Listener, PasswordFieldV2Ent
             val email = emailDet.text.trim()
             API_V2.existId(email).enqueue(object: Callback<Template<String?>> {
                 override fun onFailure(call: Call<Template<String?>>, t: Throwable) {
+                    if (!isAdded) return   // detach 후 콜백 도착 시 context!! 크래시 방어
                     responseFailed(context!!, t)
                 }
 
                 override fun onResponse(call: Call<Template<String?>>, response: Response<Template<String?>>) {
+                    if (!isAdded) return   // detach 후 콜백 도착 시 binding 접근 크래시 방어
                     val httpCode = response.code()
                     val statusCode = response.body()?.data?:""
                     val msg = response.body()?.message?:"이메일 형식을 확인해 주세요"

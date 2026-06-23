@@ -16,8 +16,12 @@ open class SafeSpinner : AppCompatSpinner {
             super.onRestoreInstanceState(state)
         } catch (_: ClassCastException) {
             // Saved state belongs to a different view type (id collision across layouts).
-            // Skip restoration; the spinner remains in its initial state, which is recoverable
-            // by the next user interaction or by the data-binding layer rebinding the selection.
+            // The ClassCastException happens in AppCompatSpinner before View.onRestoreInstanceState
+            // runs, so PFLAG_SAVE_STATE_CALLED is never set and the framework would then throw
+            // "Derived class did not call super.onRestoreInstanceState()".
+            // Restore a valid, self-typed state instead to satisfy the View contract; the spinner
+            // keeps its initial selection, recoverable via data-binding / next user interaction.
+            super.onRestoreInstanceState(super.onSaveInstanceState())
         }
     }
 }

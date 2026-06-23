@@ -35,7 +35,9 @@ class TerminalViewModel(application: Application) : BaseAndroidViewModel(applica
                 println("throwable HttpException 2 : ${throwable.code()} / ${throwable.message}")
             }
         }
-        goLoginActCallback()
+        if (::goLoginActCallback.isInitialized) {
+            goLoginActCallback()
+        }
 
     }
 

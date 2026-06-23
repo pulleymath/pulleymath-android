@@ -32,6 +32,13 @@ class MemoView: FreeDrawView {
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): super(context, attrs, defStyleAttr)
 
+    init {
+        // 필기 메모는 onPause에서 파일/서버(StudyMemo)로 저장하고 onViewCreated에서 다시 로드한다.
+        // 따라서 View 계층 인스턴스 상태(onSaveInstanceState)에 그린 경로(mPaths) 전체를 직렬화할 필요가 없다.
+        // 이를 저장하면 activityStopped 시 Bundle이 비대해져 TransactionTooLargeException이 발생한다.
+        isSaveEnabled = false
+    }
+
     var pencilPanel: IPencilPanel? = null
     var memoListener: MemoListener? = null
     var memoCase: StudyMemoCase = StudyMemoCase.PATTERN_LEARNING_PROBLEM

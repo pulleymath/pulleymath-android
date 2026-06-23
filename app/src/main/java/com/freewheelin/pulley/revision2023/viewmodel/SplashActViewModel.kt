@@ -48,7 +48,9 @@ class SplashActViewModel(application: Application) : BaseAndroidViewModel(applic
                 println("throwable HttpException 2 : ${throwable.code()} / ${throwable.message}")
             }
         }
-        goLoginActCallback()
+        if (::goLoginActCallback.isInitialized) {
+            goLoginActCallback()
+        }
 
     }
 

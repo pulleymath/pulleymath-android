@@ -39,6 +39,13 @@ class TerminalActivity : AppCompatActivity() {
             insets
         }
 
+        // fetchUser 실패 시 ProgressBar 무한 로딩에 멈추지 않도록 안내 후 종료 처리.
+        // exceptionHandler는 Dispatchers.IO에서 호출되므로 다이얼로그는 main 스레드로 전환.
+        // aiep()/whalespace()가 early-return 하기 전에 설정돼야 하므로 onCreate 상단에 둔다.
+        viewModel.goLoginActCallback = {
+            runOnUiThread { unauthorizedAccess(4012) }
+        }
+
         val intent = intent
         if (Intent.ACTION_VIEW.equals(intent.action)) {
             intent.data?.let {

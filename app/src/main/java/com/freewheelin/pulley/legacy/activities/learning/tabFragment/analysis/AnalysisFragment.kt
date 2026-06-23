@@ -200,11 +200,13 @@ class AnalysisFragment : MainTabFragment(),
     private fun getDailyStudy(studentId: String, callback: (DailyStudy)->Unit) {
         API_V3.getDailyStudy(studentId).enqueue(object : Callback<ResponseBody<DailyStudy>> {
             override fun onResponse(call: Call<ResponseBody<DailyStudy>>, response: Response<ResponseBody<DailyStudy>>) {
+                if (!isAdded) return   // 콜백이 fragment detach 후 도착하면 requireContext() 크래시 방어
                 val res = response.body() ?: return responseError(requireContext(), response)
                 res.data?.let { callback(it) }
             }
 
             override fun onFailure(call: Call<ResponseBody<DailyStudy>>, t: Throwable) {
+                if (!isAdded) return   // 콜백이 fragment detach 후 도착하면 requireContext() 크래시 방어
                 responseFailed(requireContext(), t)
             }
         })
@@ -683,11 +685,13 @@ class AnalysisFragment : MainTabFragment(),
     private fun getDailyPiece(studentId: String, callback: (List<Content>)->Unit) {
         API_V3.getDailyPiece(studentId).enqueue(object : Callback<ResponseListBody<Content>> {
             override fun onResponse(call: Call<ResponseListBody<Content>>, response: Response<ResponseListBody<Content>>) {
+                if (!isAdded) return   // 콜백이 fragment detach 후 도착하면 requireContext() 크래시 방어
                 val data = response.body()?.data ?: return responseError(requireContext(), response)
                 callback(data)
             }
 
             override fun onFailure(call: Call<ResponseListBody<Content>>, t: Throwable) {
+                if (!isAdded) return   // 콜백이 fragment detach 후 도착하면 requireContext() 크래시 방어
                 responseFailed(requireContext(), t)
             }
         })
@@ -696,6 +700,7 @@ class AnalysisFragment : MainTabFragment(),
     private fun getDailyRecommend(studentId: String, callback: (DailyRecommend)->Unit, failCB: () -> Unit) {
         API_V3.getDailyRecommend(studentId).enqueue(object : Callback<ResponseBody<DailyRecommend>> {
             override fun onResponse(call: Call<ResponseBody<DailyRecommend>>, response: Response<ResponseBody<DailyRecommend>>) {
+                if (!isAdded) return   // 콜백이 fragment detach 후 도착하면 requireContext() 크래시 방어
                 val res = response.body() ?: return responseError(requireContext(), response)
                 if (res.data != null) {
                     callback(res.data)

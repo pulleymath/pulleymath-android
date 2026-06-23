@@ -15,6 +15,12 @@ class CookingMemoView: FreeDrawView {
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int): super(context, attrs, defStyleAttr)
 
+    init {
+        // 메모는 FileHelper(파일/서버)로 별도 저장되므로 View 인스턴스 상태에 경로 전체를 직렬화하지 않는다.
+        // 거대 상태 직렬화로 인한 TransactionTooLargeException 방어 (legacy MemoView와 동일 처리).
+        isSaveEnabled = false
+    }
+
     var pencilcase: CookingPencilcase? = null
     var fingerDrawMode = false
 
