@@ -1,6 +1,5 @@
 package com.freewheelin.pulley.revision2023.model.response
 
-import com.zoyi.channel.plugin.android.annotation.Failed
 import org.joda.time.LocalDate
 
 class WeeklyPlanResponse (

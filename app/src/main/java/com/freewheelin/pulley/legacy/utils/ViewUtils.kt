@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
@@ -685,14 +687,30 @@ fun ImageView.setImageUrlPicassoDownScale(url: String) {
 }
 
 
+private fun Context.findActivity(): Activity? {
+    var ctx: Context? = this
+    while (ctx is ContextWrapper) {
+        if (ctx is Activity) return ctx
+        ctx = ctx.baseContext
+    }
+    return null
+}
+
+private val Context.isActivityDestroyedOrFinishing: Boolean
+    get() {
+        val activity = findActivity() ?: return false
+        return activity.isDestroyed || activity.isFinishing
+    }
+
 fun ImageView.setCookingImageURL(url: String) {
     if (url.isEmpty()) return
     val screenWidth by lazy { DisplayUtils.getScreenWidth(this.context) }
 
     CoroutineScope(Dispatchers.IO).launch {
+        if (this@setCookingImageURL.context.isActivityDestroyedOrFinishing) return@launch
 //        val downloadedImage: Bitmap = Picasso.get().load(url).get()
         // 피카소 쓰는거보다 글라이드가좀더 빠름
-        val downloadedImage: Bitmap =
+        val downloadedImage: Bitmap = try {
             withContext(Dispatchers.IO) {
                 Glide.with(this@setCookingImageURL.context)
                     .asBitmap()
@@ -700,6 +718,11 @@ fun ImageView.setCookingImageURL(url: String) {
                     .submit().get()
 //            .load("${url}?time=${Date().time}")
             }
+        } catch (e: IllegalArgumentException) {
+            return@launch
+        } catch (e: Exception) {
+            return@launch
+        }
 
 
         val originalWidth = downloadedImage.width
@@ -717,10 +740,14 @@ fun ImageView.setCookingImageURL(url: String) {
 
 
         withContext(Dispatchers.Main) {
-            Glide.with(this@setCookingImageURL.context)
-                .load(downloadedImage)
-                .apply(RequestOptions().override(maxWidth, originalHeight))
-                .into(this@setCookingImageURL)
+            if (this@setCookingImageURL.context.isActivityDestroyedOrFinishing) return@withContext
+            try {
+                Glide.with(this@setCookingImageURL.context)
+                    .load(downloadedImage)
+                    .apply(RequestOptions().override(maxWidth, originalHeight))
+                    .into(this@setCookingImageURL)
+            } catch (_: IllegalArgumentException) {
+            }
         }
     }
 }

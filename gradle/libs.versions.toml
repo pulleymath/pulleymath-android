@@ -9,6 +9,7 @@ browser = "1.5.0"
 exoplayer = "2.19.1"
 facebookAndroidSdk = "7.1.0"
 flexbox = "3.0.0"
+gridlayout = "1.0.0"
 htAndroidRecycleradapters = "0.6"
 glide = "4.14.2"
 installreferrerVersion = "2.2"
@@ -26,7 +27,6 @@ lottie = "6.4.0"
 okhttp3 = "3.12.13"
 pagingRuntimeKtx = "3.1.1"
 picasso = "2.71828"
-channel-talk = "10.0.7"
 recyclerview = "1.3.2"
 firebaseBom = "33.1.1"
 androidXfragment = "1.8.1"
@@ -50,6 +50,7 @@ firebaseCrashlytics = "2.9.9"
 android-joda = { module = "net.danlew:android.joda", version.ref = "androidJoda" }
 android-recycleradapters = { module = "com.github.hyuntae0117:android-RecyclerAdapters", version.ref = "htAndroidRecycleradapters" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "browser" }
+androidx-gridlayout = { module = "androidx.gridlayout:gridlayout", version.ref = "gridlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-paging-common-ktx = { module = "androidx.paging:paging-common-ktx", version.ref = "pagingRuntimeKtx" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
@@ -97,8 +98,6 @@ google-firebase-messaging = { group = "com.google.firebase", name = "firebase-me
 
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 org-jetbrain-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin"}
-channel-talk-plugin-android = { module = "io.channel:plugin-android", version.ref = "channel-talk" }
-channel-talk-plugin-android-fcm = { module = "io.channel:plugin-android-fcm", version.ref = "channel-talk" }
 rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxbinding" }
 rxbinding-appcompat-v7-kotlin = { module = "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin", version.ref = "rxbinding" }
 rxbinding-kotlin = { module = "com.jakewharton.rxbinding2:rxbinding-kotlin", version.ref = "rxbinding" }

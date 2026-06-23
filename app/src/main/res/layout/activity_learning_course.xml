@@ -370,27 +370,6 @@
 
         </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/channelIoFrame"
-            android:layout_width="438dp"
-            android:layout_height="0dp"
-            android:layout_marginVertical="32dp"
-            android:layout_marginEnd="22dp"
-            android:background="@drawable/shadow_question_floating"
-            android:padding="16dp"
-            android:visibility="@{ vm.showChannelIoFrame ? View.VISIBLE : View.GONE }"
-            tools:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headerCl" />
-
-<!--        <com.freewheelin.pulley.revision2021.channelio.channel.view.ChannelView-->
-<!--            android:layout_width="700dp"-->
-<!--            android:layout_height="200dp"-->
-<!--            tools:visibility="gone"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"/>-->
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chatBotBgCl"
             android:layout_width="match_parent"

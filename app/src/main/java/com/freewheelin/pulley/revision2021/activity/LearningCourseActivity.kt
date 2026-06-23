@@ -23,17 +23,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.BaseActivity
-import com.freewheelin.pulley.legacy.bases.user
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.databinding.ActivityLearningCourseBinding
 import com.freewheelin.pulley.legacy.activities.solve.SolveActivity
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.token
 import com.freewheelin.pulley.legacy.bases.isTablet
 import com.freewheelin.pulley.revision2021.activity.learningcourse.fragments.*
-import com.freewheelin.pulley.revision2021.channelio.ChannelIOWrapper
-import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.BlankFragment
-import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.ChatFragment
-import com.freewheelin.pulley.revision2021.channelio.channel.view.custom.LoungeFragment
 import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
 import com.freewheelin.pulley.revision2021.utils.observeOnce
@@ -50,16 +45,12 @@ import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PenColorType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
-import com.zoyi.channel.plugin.android.model.source.photopicker.FileItem
-import com.zoyi.channel.plugin.android.open.listener.ChannelPluginListener
-import com.zoyi.channel.plugin.android.open.model.PopupData
-import io.channel.plugin.android.feature.chat.contract.ChatContract
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginListener,
+class LearningCourseActivity: BaseActivity(), LifecycleObserver,
     PencilPanelListener {
 
     companion object {
@@ -114,7 +105,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
 
     private var tabFragments: MutableList<Fragment> = mutableListOf()
     var onPageChangeCallback: ViewPager2.OnPageChangeCallback? = null
-    var presenter: ChatContract.Presenter? = null
 
     private fun hideSystemUI() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -128,7 +118,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         setContentView(binding.root)
         ConceptLearningUsageMonitor.startConceptLearningUsage()
         addBackBtnCallback()
-        ChannelIOWrapper.initialize(application, this)
 
         val selectedChapterId = intent.getIntExtra(CHAPTER_ID, -1)
         val selectedChapterName = intent.getStringExtra(CHAPTER_NAME) ?: ""
@@ -402,9 +391,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     }
 
     private fun backBtnAction() {
-        if (isChannelIoForeground) {
-            beginBlackChannelIoFrame()
-        } else if (binding.chatBotBgCl.isVisible) {
+        if (binding.chatBotBgCl.isVisible) {
             binding.chatBotBgCl.visibleIf(false)
             binding.chatBotCv.visibleIf(false)
             binding.chatBotBtn.startLongClickDescAnim()
@@ -433,33 +420,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         }
     }
 
-    var isChannelIoForeground = false
-    fun beginLoungeFragment() {
-        viewModel.showChannelIoFrame.postValue(true)
-        isChannelIoForeground = true
-        val fm = supportFragmentManager
-        val fragmentA = LoungeFragment.showMessenger()
-        val transaction = fm.beginTransaction()
-        transaction.replace(R.id.channelIoFrame, fragmentA).commitAllowingStateLoss()
-    }
-
-    fun beginChatFragment(chatId: String?, message: String?) {
-        viewModel.showChannelIoFrame.postValue(true)
-        isChannelIoForeground = true
-        val fm = supportFragmentManager
-        val fragmentB = ChatFragment.newInstance(chatId, message)
-        val transaction = fm.beginTransaction()
-        transaction.replace(R.id.channelIoFrame, fragmentB).commitAllowingStateLoss()
-    }
-
-    fun beginBlackChannelIoFrame() {
-        viewModel.showChannelIoFrame.postValue(false)
-        isChannelIoForeground = false
-        val fm = supportFragmentManager
-        val fragmentC = BlankFragment()
-        val transaction = fm.beginTransaction()
-        transaction.replace(R.id.channelIoFrame, fragmentC).commitAllowingStateLoss()
-    }
     fun setCourseHeaderAnim(view: View, flag: Boolean) {
         if (!flag && view.rotation != -60f) return
         val startAngle = if (flag) 0f else -60f
@@ -687,7 +647,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
     }
     override fun onDestroy() {
         binding.pager.unregisterOnPageChangeCallback(onPageChangeCallback as ViewPager2.OnPageChangeCallback)
-//        ChannelIO.shutdown()
         super.onDestroy()
     }
 
@@ -701,67 +660,6 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver, ChannelPluginLi
         override fun createFragment(position: Int): Fragment {
             return fragments[position]
         }
-    }
-
-    fun resetChatId(chatId: String?) {
-        chatId?.let {
-            val prevChatId = Preferences.channelTalkCurrChatId.get()
-            if (it == prevChatId) {
-                Preferences.channelTalkCurrChatId.set("")
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            902 -> {
-                if (resultCode == 12) {
-                    this.presenter?.uploadFiles(data!!.getParcelableArrayListExtra<FileItem>("PHOTO_INTENT_KEY"))
-                }
-            }
-            else -> {}
-        }
-    }
-    override fun onShowMessenger() {
-        println("channelIO, onShowMessenger")
-    }
-
-    override fun onHideMessenger() {
-        println("channelIO, onHideMessenger")
-
-    }
-
-    override fun onChatCreated(chatId: String?) {
-        println("channelIO, onChatCreated chatId : ${chatId}")
-        Preferences.channelTalkCurrChatId.set(chatId ?: "")
-        val studentId = user?.studentID ?: ""
-        Preferences.studentIdWhenIssuingChatId.set(studentId)
-    }
-
-    override fun onBadgeChanged(count: Int) {
-        println("channelIO, onBadgeChanged")
-    }
-
-    override fun onFollowUpChanged(data: MutableMap<String, String>?) {
-        println("channelIO, onFollowUpChanged ")
-        data?.forEach {
-            println("channelIO, onFollowUpChanged data : ${it.key} : ${it.value}")
-        }
-    }
-
-    override fun onUrlClicked(url: String?): Boolean {
-        println("channelIO, onUrlClicked , url ${url}")
-        return true
-    }
-
-    override fun onPushNotificationClicked(chatId: String?): Boolean {
-        println("channelIO, onPushNotificationClicked")
-        return true
-    }
-
-    override fun onPopupDataReceived(popupData: PopupData?) {
-        println("channelIO, channelIO, onPopupDataReceived")
     }
 
     override fun onResume() {

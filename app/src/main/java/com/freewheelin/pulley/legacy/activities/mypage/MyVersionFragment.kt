@@ -21,7 +21,6 @@ import com.freewheelin.pulley.databinding.FragmentMyAppSettingBinding
 import com.freewheelin.pulley.databinding.FragmentMyVersionBinding
 import com.freewheelin.pulley.legacy.utils.IntentUtils
 import com.freewheelin.pulley.legacy.views.DaebakToast
-import io.channel.plugin.android.extension.join
 
 
 class MyVersionFragment : MyPageBaseFragment() {

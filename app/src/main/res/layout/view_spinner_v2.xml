@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/dp8"
         android:background="@drawable/bg_white_stroke_gray_700_round">
 
-        <Spinner
+        <com.freewheelin.pulley.revision2023.ui.view.SafeSpinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp50"

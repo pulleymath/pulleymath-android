@@ -18,7 +18,7 @@
         android:padding="16dp"
         >
 
-        <Spinner
+        <com.freewheelin.pulley.revision2023.ui.view.SafeSpinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp50"

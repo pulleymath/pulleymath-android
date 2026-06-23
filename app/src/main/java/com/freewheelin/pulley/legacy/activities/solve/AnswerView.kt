@@ -155,10 +155,22 @@ class AnswerView : ConstraintLayout,
                 else
                     (y - height - 24.toPx())
 
-                keyPad?.showAtLocation(this.rootView, Gravity.NO_GRAVITY, x, y)
-                keyPad?.contentView?.layoutParams?.width = width
-                (keyPad?.contentView?.layoutParams as ViewGroup.MarginLayoutParams).setMargins(16.toPx(), 16.toPx(), 16.toPx(), 16.toPx())
-                keyPad?.contentView?.layoutParams?.height = height
+                val showKeypad = Runnable {
+                    if (!shortAnswerView.isFocused) return@Runnable
+                    if (this.rootView.windowToken == null) return@Runnable
+                    try {
+                        keyPad?.showAtLocation(this.rootView, Gravity.NO_GRAVITY, x, y)
+                        keyPad?.contentView?.layoutParams?.width = width
+                        (keyPad?.contentView?.layoutParams as ViewGroup.MarginLayoutParams).setMargins(16.toPx(), 16.toPx(), 16.toPx(), 16.toPx())
+                        keyPad?.contentView?.layoutParams?.height = height
+                    } catch (_: WindowManager.BadTokenException) {
+                    }
+                }
+                if (this.rootView.windowToken != null) {
+                    showKeypad.run()
+                } else {
+                    this.rootView.post(showKeypad)
+                }
 //                shortAnswerView.requestFocus()
             }
         }

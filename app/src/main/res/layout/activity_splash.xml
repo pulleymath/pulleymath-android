@@ -12,7 +12,7 @@
             android:layout_width="300dp"
             android:layout_height="200dp"
             android:textColor="@color/purple_300"
-            android:background="@color/ch_transparent"
+            android:background="@android:color/transparent"
             android:textSize="@dimen/sp48"
             android:text="PULLEY"
             app:layout_constraintStart_toStartOf="parent"

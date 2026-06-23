@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.TextviewAnalysisCompareBinding
-import io.channel.plugin.android.extension.setTint
 
 class AnalysisCompareTextView: LinearLayout {
     constructor(context: Context): super(context)
@@ -28,7 +27,7 @@ class AnalysisCompareTextView: LinearLayout {
                 UpDownTextView.Change.decrease -> {
                     setDiffTextColor(ContextCompat.getColor(context!!, R.color.red_300))
                     binding.changeIv.setImageResource(R.drawable.ic_blunt_triangle_bottom_8_6_gray_400)
-                    binding.changeIv.setTint(ContextCompat.getColor(context!!, R.color.red_300))
+                    androidx.core.widget.ImageViewCompat.setImageTintList(binding.changeIv, android.content.res.ColorStateList.valueOf(ContextCompat.getColor(context!!, R.color.red_300)))
                 }
                 UpDownTextView.Change.noChange -> {
                     setDiffTextColor(ContextCompat.getColor(context!!, R.color.gray_600))

@@ -27,8 +27,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.FragmentPatternQuizBinding
 import com.freewheelin.pulley.legacy.bases.MyApplication.Companion.user
 import com.freewheelin.pulley.revision2021.activity.LearningCourseActivity
-import com.freewheelin.pulley.revision2021.activity.dialog.ChannelIoQuestionDialog
-import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
 import com.freewheelin.pulley.revision2021.cookingmemo.storage.DatabaseHelper
 import com.freewheelin.pulley.revision2021.model.LCPatternConcept
 import com.freewheelin.pulley.revision2021.model.LCPatternQuiz
@@ -43,7 +41,6 @@ import com.freewheelin.pulley.revision2023.model.StudyMemoCase
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PencilPanelListener
 import kotlinx.coroutines.*
-import java.io.File
 
 class PatternQuizFragment() : Fragment(),
     FloatingAnswerDelegate,
@@ -238,33 +235,6 @@ class PatternQuizFragment() : Fragment(),
             }
         }
     }
-    fun openChannelIoDialog (courseName: String) {
-        binding.apply {
-
-            val screenShotBitmap = leftScrollRootCl.getBitmap(leftScrollRootCl.width, leftScrollRootCl.height)
-
-            val dialog = ChannelIoQuestionDialog.newInstance(screenShotBitmap)
-            dialog.callback = { radioMsg, additionalMsg ->
-                val message = "${courseName}\n\n${radioMsg}\n\n${additionalMsg}"
-                (activity as? LearningCourseActivity)?.let { lcActivity ->
-                    lcActivity.getFileImageAsCache(screenShotBitmap)?.let {
-
-                        CoroutineScope(Dispatchers.IO).launch {
-                            withContext(Dispatchers.Main) {
-                                PChannelIO.openChat(activity, null, "")
-                            }
-                            delay(1500)
-                            postImageMessage(it, message)
-                        }
-                    }
-                }
-            }
-            childFragmentManager.let { dialog.show(it, "ChannelIoQuestionDialog") }
-
-
-        }
-    }
-
     private fun addBaseConcept(quiz: LCPatternQuiz) {
         binding.apply {
             val conceptsBase = quiz.concepts.filter { it.conceptTypeEnum == LCPatternConcept.ConceptType.base }
@@ -347,24 +317,6 @@ class PatternQuizFragment() : Fragment(),
             solutionScrollRootLl.addView(iv)
         }
     }
-    fun postImageMessage(file: File, msg: String) {
-        (activity as? LearningCourseActivity)?.apply {
-            viewModel.uploadImageCaptureFile(file) {
-                it?.let { uploadRes ->
-                    viewModel.currChannelIOImage = uploadRes
-
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(1000)
-                        viewModel.postChannelIoCapturedImageMessage(uploadRes) {
-                            viewModel.postChannelIoTextMessage(msg) {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     fun onFloatingAnswerSheetDragListener (view: View, dragEvent: DragEvent): Boolean {
         binding.apply {
             when (dragEvent.action) {

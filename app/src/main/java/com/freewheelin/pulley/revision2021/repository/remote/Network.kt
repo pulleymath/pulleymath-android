@@ -4,7 +4,6 @@ import android.util.Log
 import com.freewheelin.pulley.legacy.assets.URL
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.bases.user
-import com.freewheelin.pulley.revision2021.channelio.channel.PChannelIO
 import com.freewheelin.pulley.legacy.utils.APHelper
 import com.freewheelin.pulley.legacy.utils.Preferences
 import com.google.gson.GsonBuilder
@@ -12,7 +11,6 @@ import com.google.gson.annotations.SerializedName
 import com.pulleymath.android.pdf.log.Network
 import com.pulleymath.android.pdf.log.PdfMemoPostResponse
 import com.pulleymath.android.pdf.log.PdfMemoService
-import com.zoyi.channel.plugin.android.global.PrefSupervisor
 import okhttp3.Interceptor
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -64,14 +62,6 @@ object Network {
         Server.dev.toString() -> "https://pulley-cooking-dev.pulleymath.com"
         else -> "https://pulley-cooking-live.pulleymath.com"
     }
-    val channelTalkMediaUrl = when (Preferences.onServerAPI.get()) {
-        Server.live.toString() -> "https://media.channel.io"
-        else -> "https://media.channel.io"
-    }
-    val channelTalkApiUrl = when (Preferences.onServerAPI.get()) {
-        Server.live.toString() -> "https://api.channel.io"
-        else -> "https://api.channel.io"
-    }
 //    var purchaseSubscriptionUrl = "${springUrl}/gateway?token="
     var webRedirectUrlOnShortToken = when (Preferences.onServerAPI.get()) {
         Server.live.toString() -> "${Preferences.shopUrl.get()}/ottway?token="
@@ -86,7 +76,7 @@ object Network {
     var token = ""
 
     enum class Type {
-        node, mockTest, spring, cooking, channelTalkMedia, channelTalkApi;
+        node, mockTest, spring, cooking;
 
         val url: String
             get() {
@@ -95,8 +85,6 @@ object Network {
                     mockTest -> mockTestUrl
                     spring -> springUrl
                     cooking -> cookingUrl
-                    channelTalkMedia -> channelTalkMediaUrl
-                    channelTalkApi -> channelTalkApiUrl
                 }
             }
     }
@@ -153,56 +141,6 @@ object Network {
         }.build()
     }
 
-    fun retrofitChannelIO(type: Type = Type.cooking, mimeType: String = "image/png"): Retrofit {
-        return Retrofit.Builder().baseUrl(type.url).apply {
-
-            val client = OkHttpClient.Builder().apply {
-
-                val interceptor = HttpLoggingInterceptor()
-                interceptor.level = HttpLoggingInterceptor.Level.BODY
-                addInterceptor(interceptor)
-
-                addInterceptor(
-                    Interceptor { chain ->
-                        val jwt = PrefSupervisor.getJwt(PChannelIO.getAppContext())
-
-                        // 혹시 몰라서 분기
-                        val builder = if (type == Type.channelTalkMedia) {
-                            chain.request().newBuilder()
-                                .header("x-session", jwt)
-                                .header("X-Requested-With", "XMLHttpRequest")
-                                .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.87 Whale/3.16.138.22 Safari/537.36")
-                                .header("content-type", mimeType)
-
-                        } else if (type == Type.channelTalkApi) {
-                            chain.request().newBuilder()
-                                .header("x-session", jwt)
-                                .header("X-Requested-With", "XMLHttpRequest")
-                                .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.87 Whale/3.16.138.22 Safari/537.36")
-
-                        } else {
-                            chain.request().newBuilder()
-                        }
-
-                        val response = chain.proceed(builder.build())
-
-                        return@Interceptor response
-                    }
-                )
-                connectTimeout(30, TimeUnit.SECONDS)
-                readTimeout(15, TimeUnit.SECONDS)
-                writeTimeout(15, TimeUnit.SECONDS)
-            }.build()
-
-            client(client)
-            addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            addConverterFactory(GsonConverterFactory.create())
-
-            // Enum파싱 관련해서 추가했는데 추가하니까 잘 동작해서 한번 빼고 해봤는데 동작해서 주석처리했다 (?)
-//            addConverterFactory(EnumConverterFactory())
-
-        }.build()
-    }
     private val pdfService = retrofit().create(PdfService::class.java)
 
 

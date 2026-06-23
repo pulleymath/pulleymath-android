@@ -6,7 +6,7 @@
 <!--        android:drawable="@drawable/switch_track_off_highschool_transparent"-->
 
     <item
-        android:background="@color/ch_transparent"
+        android:background="@android:color/transparent"
         android:drawable="@drawable/switch_track_off_highschool"
         android:state_checked="true"/>
 <!--        android:drawable="@drawable/switch_track_on_middleschool_transparent"-->

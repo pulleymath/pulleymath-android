@@ -22,7 +22,6 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.utils.visibleIf
 import com.freewheelin.pulley.legacy.views.memoView.HistoryPath
 import com.freewheelin.pulley.legacy.views.memoView.MemoView
-import com.zoyi.channel.plugin.android.global.Const
 
 interface PencilPanelListener {
     fun onFingerDrawModeChanged(value: Boolean)

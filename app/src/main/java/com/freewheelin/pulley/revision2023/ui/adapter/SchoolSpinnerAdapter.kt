@@ -20,10 +20,13 @@ class SchoolSpinnerAdapter (context: Context, @LayoutRes private val resId: Int,
 
     var selectedPosition = 0
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        selectedPosition = position
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_school_spinner_selected, parent, false)
+        if (position < 0 || position >= menuList.size) {
+            return view!!
+        }
+        selectedPosition = position
         val title: TextView? = view?.findViewById(R.id.title)
-        title?.text = getItem(position)
+        title?.text = menuList[position]
         val taillessArrow: ImageView? = view?.findViewById(R.id.arrowIv)
 
         when (position) {
@@ -42,9 +45,12 @@ class SchoolSpinnerAdapter (context: Context, @LayoutRes private val resId: Int,
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_school_spinner_dropdown, parent, false)
+        if (position < 0 || position >= menuList.size) {
+            return view!!
+        }
 
         val content: TextView? = view?.findViewById(R.id.content)
-        content?.text = getItem(position)
+        content?.text = menuList[position]
 
         val checkIv: ImageView? = view?.findViewById(R.id.checkIv)
 
@@ -60,5 +66,9 @@ class SchoolSpinnerAdapter (context: Context, @LayoutRes private val resId: Int,
         }
 
         return view!!
+    }
+
+    override fun getItem(position: Int): String? {
+        return menuList.getOrNull(position)
     }
 }

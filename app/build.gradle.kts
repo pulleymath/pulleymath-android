@@ -31,8 +31,8 @@ android {
         applicationId = "com.freewheelin.pulley"
         minSdk = 25
         targetSdk = 35
-        versionCode = 558
-        versionName = "1.6.138"
+        versionCode = 559
+        versionName = "1.6.139"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -203,10 +203,8 @@ dependencies {
 //    ksp(libs.androidx.room.compiler)
     kapt(libs.androidx.room.compiler)
 
-    implementation(libs.channel.talk.plugin.android)
-    implementation(libs.channel.talk.plugin.android.fcm)
-
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.gridlayout)
 
     implementation(libs.installreferrer)
 

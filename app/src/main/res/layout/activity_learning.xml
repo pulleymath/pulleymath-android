@@ -57,7 +57,7 @@
                     app:tabPaddingStart="@dimen/dp24"
                     app:tabPaddingEnd="@dimen/dp24"
                     app:tabIndicatorHeight="0dp"
-                    app:tabBackground="@color/ch_transparent"
+                    app:tabBackground="@android:color/transparent"
                     app:tabSelectedTextColor="@color/gray_800"
                     app:tabTextAppearance="@style/AppTheme.TabBar.TabText"
                     app:tabTextColor="@color/gray_700" >

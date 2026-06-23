@@ -8,29 +8,19 @@ import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 //import com.freewheelin.pulley.revision2021.model.CourseContentTable
 import com.freewheelin.pulley.revision2021.model.CourseType
 import com.freewheelin.pulley.revision2021.model.StudyChapter
-import com.freewheelin.pulley.revision2021.model.request.channelio.PostImageMessageReq
-import com.freewheelin.pulley.revision2021.model.request.channelio.PostTextMessageReq
 import com.freewheelin.pulley.revision2021.model.response.SingleCourseDesc
-import com.freewheelin.pulley.revision2021.model.response.channelio.ChannelIOImageUploadRes
-import com.freewheelin.pulley.revision2021.repository.ChannelTalkRepository
 import com.freewheelin.pulley.revision2021.repository.ConceptCourseFragRepository
 import com.freewheelin.pulley.revision2021.repository.LearningCourseRepository
-import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.revision2023.model.ChatBotInfo
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PenColorType
-import com.zoyi.channel.plugin.android.store.ChannelStore
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import okhttp3.MediaType
-import okhttp3.RequestBody
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     private val courseRepository: LearningCourseRepository by lazy { LearningCourseRepository() }
-    private val channelTalkRepository: ChannelTalkRepository by lazy { ChannelTalkRepository() }
     private val studyRepository: ConceptCourseFragRepository by lazy { ConceptCourseFragRepository() }
 
     val courseHeaderContentTable by lazy { MutableLiveData<List<SingleCourseDesc>>() }
@@ -54,7 +44,6 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
     var selectedChapterId: Int? = null
 
     val showProgress by lazy { MutableLiveData(false) }
-    val showChannelIoFrame by lazy { MutableLiveData(false) }
     val isPagerFirstIndex by lazy { MutableLiveData(true) }
     val isPagerLastIndex by lazy { MutableLiveData(false) }
     val isPriorConceptScene by lazy { MutableLiveData(false) }
@@ -66,8 +55,6 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
 
     var currPagerPosition = 0
     val selectedPagerIndex by lazy { MutableLiveData<Int>(0) }
-
-    var currChannelIOImage: ChannelIOImageUploadRes? = null
 
     var chatBotInfo: ChatBotInfo? = null
     var isMemoSavedImageOrStrokeExist = false
@@ -211,88 +198,6 @@ class LearningCourseViewModel : BaseViewModel(), LifecycleObserver {
             return it.filter { it.courseType == type }
         }
         return listOf()
-    }
-
-    fun getChats(callback: () -> Unit) {
-        compositeDisposable += channelTalkRepository.getChats()
-            .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ response ->
-                Log.d(javaClass.simpleName, "getChats =>${response}")
-                response.let {
-
-                    it.userChats.forEach {
-                        if (it.source.page == "LearningCourseActivity") {
-                            val chatId = Preferences.channelTalkCurrChatId.get()
-                            if (chatId != it.id) {
-                                Preferences.studentIdWhenIssuingChatId.set(it.id)
-                                val studentId = user?.studentID ?: ""
-                                Preferences.studentIdWhenIssuingChatId.set(studentId)
-                            }
-                            return@forEach
-                        }
-                    }
-                    callback()
-                }
-            }, { error ->
-                Log.e(javaClass.simpleName, "getChats error=${error.localizedMessage}")
-                callback()
-            })
-    }
-
-    fun uploadImageCaptureFile(file: File, callback: (ChannelIOImageUploadRes?) -> Unit) {
-        val channelId = ChannelStore.get().channelState.get()?.id ?: "104720"
-        val chatId = Preferences.channelTalkCurrChatId.get()
-        val fileName = "question_file.png"
-
-        val file = RequestBody.create(MediaType.parse("image/png"), file)
-        compositeDisposable += channelTalkRepository.uploadCaptureImage(channelId, chatId, fileName, file)
-            .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ response ->
-                Log.d(javaClass.simpleName, "uploadImageCaptureFile =>${response}")
-
-                callback(response)
-            }, { error ->
-                Log.e(javaClass.simpleName, "uploadImageCaptureFile error=${error.localizedMessage}")
-                callback(null)
-            })
-    }
-
-    fun postChannelIoCapturedImageMessage(res: ChannelIOImageUploadRes, callback: () -> Unit) {
-        val chatId = Preferences.channelTalkCurrChatId.get()
-        val pageName = "LearningCourseActivity" // ChannelIO를 initialize한 Activity의 이름
-        val personId = Preferences.channelTalkUserId.get()
-        val body = PostImageMessageReq(personId, res)
-        compositeDisposable += channelTalkRepository.postCapturedImageMessage(chatId, pageName, body)
-            .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ response ->
-                Log.d(javaClass.simpleName, "postCapturedImageMessage =>${response}")
-
-                callback()
-            }, { error ->
-                Log.e(javaClass.simpleName, "postCapturedImageMessage error=${error.localizedMessage}")
-                callback()
-            })
-    }
-
-    fun postChannelIoTextMessage(msg: String, callback: () -> Unit) {
-        val chatId = Preferences.channelTalkCurrChatId.get()
-        val pageName = "LearningCourseActivity" // ChannelIO를 initialize한 Activity의 이름
-        val personId = Preferences.channelTalkUserId.get()
-        val body = PostTextMessageReq(personId, msg)
-        compositeDisposable += channelTalkRepository.postTextMessage(chatId, pageName, body)
-            .subscribeOn(Schedulers.io())
-            .timeout(3, TimeUnit.SECONDS)
-            .subscribe({ response ->
-                Log.d(javaClass.simpleName, "postCapturedImageMessage =>${response}")
-
-                callback()
-            }, { error ->
-                Log.e(javaClass.simpleName, "postCapturedImageMessage error=${error.localizedMessage}")
-                callback()
-            })
     }
 
     fun createLearningCourseOnStudentId(chapterId: Int, callback: () -> Unit) {

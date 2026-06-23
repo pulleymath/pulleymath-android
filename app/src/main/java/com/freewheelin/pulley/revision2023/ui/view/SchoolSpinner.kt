@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.utils.dpToPx
 
-class SchoolSpinner : androidx.appcompat.widget.AppCompatSpinner {
+class SchoolSpinner : SafeSpinner {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
 
