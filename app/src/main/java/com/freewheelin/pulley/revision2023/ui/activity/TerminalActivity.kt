@@ -143,9 +143,8 @@ class TerminalActivity : AppCompatActivity() {
             commitUser()
             putFcmToken()
             viewModel.fetchMainProfile {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                startActivity(intent)
+                // 교육청 사용자는 네이티브 Main 대신 WebView로 webapp을 사용한다
+                startActivity(AiepWebViewActivity.webAppIntent(this))
                 finishAffinity()
             }
         }

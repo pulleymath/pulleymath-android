@@ -51,12 +51,16 @@
 
         <ImageView
             android:id="@+id/pulleyIv"
-            android:layout_width="522dp"
+            android:layout_width="0dp"
             android:layout_height="56dp"
             android:src="@drawable/pulleymath"
-            android:layout_marginStart="2dp"
-            app:layout_constraintStart_toStartOf="@+id/topLabel"
-            app:layout_constraintEnd_toEndOf="@+id/topLabel"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_marginStart="@dimen/dp24"
+            android:layout_marginEnd="@dimen/dp24"
+            app:layout_constraintWidth_max="522dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/guideline"/>
 
 

@@ -192,6 +192,13 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
         <activity
+            android:name=".revision2023.ui.activity.AiepWebViewActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".revision2023.ui.activity.WorkbookListActivity"
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
@@ -261,6 +268,7 @@
             android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".legacy.activities.StartActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="true"
             android:screenOrientation="sensorLandscape" />
         <activity

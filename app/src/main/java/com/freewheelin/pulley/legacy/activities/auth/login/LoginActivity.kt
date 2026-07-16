@@ -2,6 +2,7 @@ package com.freewheelin.pulley.legacy.activities.auth.login
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.text.InputType
 import android.text.SpannableString
@@ -40,9 +41,9 @@ import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.viewmodel.LoginActViewModel
 import com.freewheelin.pulley.legacy.views.editText.*
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.*
+import com.freewheelin.pulley.revision2023.ui.activity.AiepWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginActivity
-import com.freewheelin.pulley.revision2023.ui.dialogs.AiepEducationOfficeDialogFragment
 import com.freewheelin.pulley.revision2023.utils.StringUtils
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -93,6 +94,10 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 앱은 기본 landscape이나, 모바일(폰)에서는 로그인 화면을 portrait로 사용한다.
+        // 레이아웃 분기(sw600dp)와 동일 기준인 R.bool.isPortrait로 판별.
+        requestedOrientation = if (resources.getBoolean(R.bool.isPortrait)) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        else ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         setContentView(binding.root)
 
         onBackPressedDispatcher.addCallback(this) {
@@ -113,7 +118,7 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             }
             aiepLoginBtn.setOnClickListener {
                 Log.d(javaClass.simpleName, "aiepLoginBtn clicked")
-                AiepEducationOfficeDialogFragment.openAiepLink(this@LoginActivity)
+                startActivity(AiepWebViewActivity.loginIntent(this@LoginActivity))
             }
             findIdPwTv.setOnClickListener {
                 this@LoginActivity.onFindIdPwTvClicked()

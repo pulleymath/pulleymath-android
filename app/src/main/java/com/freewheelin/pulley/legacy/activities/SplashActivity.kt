@@ -24,9 +24,11 @@ import com.freewheelin.pulley.legacy.core.manage.VersionInfo
 import com.freewheelin.pulley.legacy.core.manage.VersionManager
 import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.legacy.model.ServerStatus
+import com.freewheelin.pulley.legacy.model.SignInChannel
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.legacy.utils.*
+import com.freewheelin.pulley.revision2023.ui.activity.AiepWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.activity.OnBoardingActivity
 import com.freewheelin.pulley.revision2023.ui.activity.WhaleSpaceLoginActivity
@@ -44,6 +46,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
+
+// 교육청(AIEP) 계정 자동로그인 시 네이티브 Main 대신 WebView webapp으로 진입할지 여부 (롤백용 플래그)
+private const val AIEP_WEBAPP_ON_AUTOLOGIN = true
+
+// 내부테스트용 임시 플래그 — true면 채널 무관하게 자동로그인 시 WebView webapp 진입. 정식 배포 전 반드시 false로
+private const val FORCE_AIEP_WEBAPP_FOR_TEST = true
 
 class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private var enableBack = true
@@ -64,7 +72,8 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         setContentView(binding.root)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        requestedOrientation = if(isMobileUI) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        // 레이아웃 분기(sw600dp)와 동일 기준으로 판별해 방향-레이아웃 불일치를 막는다.
+        requestedOrientation = if(resources.getBoolean(R.bool.isPortrait)) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         else ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
 
@@ -361,7 +370,14 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         viewModel.sendLoginLog(user, user.accountEmail)
         viewModel.fetchMainProfile {
             finishAffinity()
-            val intent = Intent(this, MainActivity::class.java)
+            // 교육청(AIEP) 사용자는 네이티브 Main 대신 WebView로 webapp을 사용한다
+            val intent = if (FORCE_AIEP_WEBAPP_FOR_TEST ||
+                (AIEP_WEBAPP_ON_AUTOLOGIN && user.signInChannel == SignInChannel.AIEP)
+            ) {
+                AiepWebViewActivity.webAppIntent(this)
+            } else {
+                Intent(this, MainActivity::class.java)
+            }
             startActivity(intent)
         }
     }

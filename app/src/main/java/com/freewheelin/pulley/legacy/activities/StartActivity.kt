@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,6 +40,10 @@ class StartActivity : BaseActivity(), LifecycleObserver {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 앱은 기본 landscape이나, 모바일(폰)에서는 이 진입 화면을 portrait로 사용한다.
+        // 레이아웃 분기(sw600dp)와 동일 기준인 R.bool.isPortrait로 판별.
+        requestedOrientation = if (resources.getBoolean(R.bool.isPortrait)) ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        else ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         setContentView(binding.root)
 
         initUI()
