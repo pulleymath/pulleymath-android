@@ -29,6 +29,7 @@ import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.pxToSp
 import com.freewheelin.pulley.legacy.utils.showExpandVertical
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.autoCloseOnChatBotExit
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.utils.listeners.ChatBotClientClickEventListener
 import com.freewheelin.pulley.revision2023.viewmodel.MockListActViewModel
@@ -156,6 +157,7 @@ class MockListActivity : AppCompatActivity(), LifecycleObserver, MockTabListener
                         chatBotBtn.startLongClickDescAnim()
                     }
                 }
+                it.autoCloseOnChatBotExit(onClose)
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
                         onCloseListener = onClose,

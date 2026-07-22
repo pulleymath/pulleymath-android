@@ -49,6 +49,7 @@ import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.autoCloseOnChatBotExit
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.dialogs.JoinInduceForGuestDialog
 import com.freewheelin.pulley.revision2023.ui.dialogs.SnackTestRecommendSettingDialog
@@ -133,6 +134,7 @@ class TestActivity : AppCompatActivity(), LifecycleObserver, TestMainBaseListene
                         chatBotBtn.startLongClickDescAnim()
                     }
                 }
+                it.autoCloseOnChatBotExit(onClose)
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
                         onCloseListener = onClose,

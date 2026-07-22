@@ -187,6 +187,7 @@ class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListene
                         chatBotBtn.startLongClickDescAnim()
                     }
                 }
+                it.autoCloseOnChatBotExit(onClose)
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
                         onCloseListener = onClose,

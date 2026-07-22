@@ -38,6 +38,7 @@ import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.setPaddingBottom
 import com.freewheelin.pulley.legacy.utils.toPx
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.autoCloseOnChatBotExit
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.legacy.views.NoteStudyViewListener
 import com.freewheelin.pulley.legacy.views.WrongManageView
@@ -256,6 +257,7 @@ class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChan
                         chatBotBtn.startLongClickDescAnim()
                     }
                 }
+                it.autoCloseOnChatBotExit(onClose)
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
                         onCloseListener = onClose,

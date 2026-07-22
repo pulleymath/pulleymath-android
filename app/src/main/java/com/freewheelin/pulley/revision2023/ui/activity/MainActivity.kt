@@ -292,6 +292,15 @@ class MainActivity : PermissionActivity(),
                 }
             }
             webView?.let {
+                it.webViewClient = object : WebViewClient() {
+                    override fun doUpdateVisitedHistory(view: WebView?, url: String?, isReload: Boolean) {
+                        super.doUpdateVisitedHistory(view, url, isReload)
+                        if (url?.contains("/chat-bot/exit") == true) {
+                            chatBotBgCl?.visibleIf(false)
+                            chatBotBtn?.startLongClickDescAnim()
+                        }
+                    }
+                }
                 it.addJavascriptInterface(ChatBotClientClickEventListener (
                     onCloseListener = {
                         runOnUiThread {

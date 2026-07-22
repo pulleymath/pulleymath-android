@@ -774,6 +774,20 @@ fun View.setMarginEnd(dp: Int) {
 fun View.visibleIf(isVisible: Boolean) {
     this.visibility = if(isVisible) View.VISIBLE else View.GONE
 }
+
+/**
+ * 웹 챗봇이 종료(exit) 라우트(/chat-bot/exit)로 이동하면 닫기 의도로 간주해 [onExit]를 실행한다.
+ * 웹의 window.android.onClose() 호출이 지연/누락되어도 모달이 확실히 닫히도록 하는 방어 로직.
+ * doUpdateVisitedHistory 는 SPA(pushState) 라우팅도 잡으므로 클라이언트 라우팅에도 동작한다.
+ */
+fun android.webkit.WebView.autoCloseOnChatBotExit(onExit: () -> Unit) {
+    webViewClient = object : android.webkit.WebViewClient() {
+        override fun doUpdateVisitedHistory(view: android.webkit.WebView?, url: String?, isReload: Boolean) {
+            super.doUpdateVisitedHistory(view, url, isReload)
+            if (url?.contains("/chat-bot/exit") == true) onExit()
+        }
+    }
+}
 fun View.visibleOrInvisibleIf(isVisible: Boolean) {
     this.visibility = if(isVisible) View.VISIBLE else View.INVISIBLE
 }

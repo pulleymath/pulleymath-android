@@ -60,3 +60,7 @@ data class UserV4(
 enum class SignInChannel {
     WHALESPACE, PULLEY, NAVER, APPLE, AIEP
 }
+
+// 웹앱(WebView) 서비스 대상 채널 — 네이티브 Main 대신 AiepWebViewActivity(webapp)로 진입한다
+val SignInChannel.usesWebApp: Boolean
+    get() = this == SignInChannel.AIEP || this == SignInChannel.WHALESPACE

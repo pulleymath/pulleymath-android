@@ -79,6 +79,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup">
+
+        <!-- Android 16(API 36) 대형 화면 방향·크기 제한 무시 대응: 기존 가로 고정 동작 유지 (SDK 37 target 전까지 유효한 임시 조치) -->
+        <property
+            android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY"
+            android:value="true" />
+
         <activity
             android:name=".revision2023.ui.activity.OnBoardingActivity"
             android:screenOrientation="sensorLandscape"

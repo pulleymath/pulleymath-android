@@ -31,6 +31,7 @@ import com.freewheelin.pulley.revision2021.viewmodel.LCWrongNoteAViewModel
 import com.freewheelin.pulley.legacy.utils.getSerializable
 import com.freewheelin.pulley.legacy.utils.setMarginTop
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.autoCloseOnChatBotExit
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.ui.view.DrawType
 import com.freewheelin.pulley.revision2023.ui.view.PenColorType
@@ -234,6 +235,7 @@ class LCWrongNoteActivity : AppCompatActivity() {
                 val onClose = {
                     runOnUiThread { chatBotBgCl.visibleIf(false) }
                 }
+                it.autoCloseOnChatBotExit(onClose)
                 val onMemoExist: () -> Boolean = {
                     viewModel.isMemoSavedImageOrStrokeExist
                 }

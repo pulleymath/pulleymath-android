@@ -20,6 +20,7 @@ import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.manage.UserManager
 import com.freewheelin.pulley.legacy.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.legacy.model.ResponseBody
+import com.freewheelin.pulley.legacy.model.usesWebApp
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.SignInAppToken
@@ -109,8 +110,12 @@ class WhaleSpaceLoginActivity : AppCompatActivity() {
             val userUpdateIntent = Intent(UserManager.EVENT_USER_UPDATE)
             LocalBroadcastManager.getInstance(this).sendBroadcast(userUpdateIntent)
             viewModel.fetchMainProfile {
-                val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                // 교육청(AIEP)·웨일스페이스 사용자는 네이티브 Main 대신 WebView로 webapp을 사용한다
+                val intent = if (it.signInChannel.usesWebApp) {
+                    AiepWebViewActivity.webAppIntent(this)
+                } else {
+                    Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }
                 startActivity(intent)
                 finishAffinity()
             }

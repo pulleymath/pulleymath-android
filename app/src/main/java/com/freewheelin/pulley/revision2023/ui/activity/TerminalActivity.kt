@@ -13,6 +13,7 @@ import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.MyApplication
 import com.freewheelin.pulley.legacy.core.API_APP
 import com.freewheelin.pulley.legacy.model.UserV4
+import com.freewheelin.pulley.legacy.model.usesWebApp
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.HttpException401
 import com.freewheelin.pulley.revision2023.model.CoroutineExceptionType.NONE
@@ -110,7 +111,12 @@ class TerminalActivity : AppCompatActivity() {
                     MyApplication.user!!.commit("TerminalActivity.whalespace")
                     putFcmToken()
                     finishAffinity()
-                    val intent = Intent(this, MainActivity::class.java)
+                    // 교육청(AIEP)·웨일스페이스 사용자는 네이티브 Main 대신 WebView로 webapp을 사용한다
+                    val intent = if (user.signInChannel.usesWebApp) {
+                        AiepWebViewActivity.webAppIntent(this)
+                    } else {
+                        Intent(this, MainActivity::class.java)
+                    }
                     startActivity(intent)
                 }
             }, expiredCb = {

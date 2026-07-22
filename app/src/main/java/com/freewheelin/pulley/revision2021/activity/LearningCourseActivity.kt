@@ -339,6 +339,7 @@ class LearningCourseActivity: BaseActivity(), LifecycleObserver,
                 val onClose = {
                     runOnUiThread { chatBotBgCl.visibleIf(false) }
                 }
+                it.autoCloseOnChatBotExit(onClose)
                 val onMemoExist: () -> Boolean = {
                     viewModel.isMemoSavedImageOrStrokeExist
                 }

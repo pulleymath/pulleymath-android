@@ -220,6 +220,7 @@ class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanList
                         chatBotBtn.startLongClickDescAnim()
                     }
                 }
+                it.autoCloseOnChatBotExit(onClose)
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
                         onCloseListener = onClose,

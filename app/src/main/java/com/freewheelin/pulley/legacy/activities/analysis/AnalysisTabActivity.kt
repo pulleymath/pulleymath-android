@@ -229,6 +229,7 @@ class AnalysisTabActivity : BaseNavActivity(),
                         chatBotBtn?.startLongClickDescAnim()
                     }
                 }
+                it.autoCloseOnChatBotExit(onClose)
                 it.addJavascriptInterface(
                     ChatBotClientClickEventListener (
                         onCloseListener = onClose,

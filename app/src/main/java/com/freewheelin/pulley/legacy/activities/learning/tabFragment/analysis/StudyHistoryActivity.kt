@@ -37,6 +37,7 @@ import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.responseError
 import com.freewheelin.pulley.legacy.utils.responseFailed
 import com.freewheelin.pulley.legacy.utils.visibleIf
+import com.freewheelin.pulley.legacy.utils.autoCloseOnChatBotExit
 import com.freewheelin.pulley.legacy.views.DabakTabRadioListener
 import com.freewheelin.pulley.legacy.views.DaebakTabRadio
 import com.freewheelin.pulley.revision2021.activity.MockReportActivity
@@ -208,6 +209,12 @@ class StudyHistoryActivity : AppCompatActivity(), DabakTabRadioListener, MockExa
                         }
                     }
                 ), "android")
+                it.autoCloseOnChatBotExit {
+                    runOnUiThread {
+                        chatBotBgCl?.visibleIf(false)
+                        chatBotBtn?.startLongClickDescAnim()
+                    }
+                }
 
                 it.settings.apply {
                     javaScriptEnabled = true

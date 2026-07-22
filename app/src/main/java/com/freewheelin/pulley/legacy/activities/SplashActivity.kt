@@ -24,7 +24,7 @@ import com.freewheelin.pulley.legacy.core.manage.VersionInfo
 import com.freewheelin.pulley.legacy.core.manage.VersionManager
 import com.freewheelin.pulley.databinding.ActivitySplashBinding
 import com.freewheelin.pulley.legacy.model.ServerStatus
-import com.freewheelin.pulley.legacy.model.SignInChannel
+import com.freewheelin.pulley.legacy.model.usesWebApp
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.freewheelin.pulley.revision2023.viewmodel.SplashActViewModel
 import com.freewheelin.pulley.legacy.utils.*
@@ -47,11 +47,8 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 
-// 교육청(AIEP) 계정 자동로그인 시 네이티브 Main 대신 WebView webapp으로 진입할지 여부 (롤백용 플래그)
-private const val AIEP_WEBAPP_ON_AUTOLOGIN = true
-
-// 내부테스트용 임시 플래그 — true면 채널 무관하게 자동로그인 시 WebView webapp 진입. 정식 배포 전 반드시 false로
-private const val FORCE_AIEP_WEBAPP_FOR_TEST = true
+// 웹앱 채널(교육청 AIEP·웨일스페이스) 계정 자동로그인 시 네이티브 Main 대신 WebView webapp으로 진입할지 여부 (롤백용 플래그)
+private const val WEBAPP_ON_AUTOLOGIN = true
 
 class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
     private var enableBack = true
@@ -370,10 +367,8 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
         viewModel.sendLoginLog(user, user.accountEmail)
         viewModel.fetchMainProfile {
             finishAffinity()
-            // 교육청(AIEP) 사용자는 네이티브 Main 대신 WebView로 webapp을 사용한다
-            val intent = if (FORCE_AIEP_WEBAPP_FOR_TEST ||
-                (AIEP_WEBAPP_ON_AUTOLOGIN && user.signInChannel == SignInChannel.AIEP)
-            ) {
+            // 교육청(AIEP)·웨일스페이스 사용자는 네이티브 Main 대신 WebView로 webapp을 사용한다
+            val intent = if (WEBAPP_ON_AUTOLOGIN && user.signInChannel.usesWebApp) {
                 AiepWebViewActivity.webAppIntent(this)
             } else {
                 Intent(this, MainActivity::class.java)

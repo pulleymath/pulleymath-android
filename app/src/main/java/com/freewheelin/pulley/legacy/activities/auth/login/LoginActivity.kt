@@ -35,6 +35,7 @@ import com.freewheelin.pulley.databinding.ActivityLoginBinding
 import com.freewheelin.pulley.legacy.dialogs.ConfirmPhoneDialog
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.Template
+import com.freewheelin.pulley.legacy.model.usesWebApp
 import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.freewheelin.pulley.revision2023.model.SignInAppToken
 import com.freewheelin.pulley.legacy.utils.*
@@ -412,7 +413,12 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             putFcmToken()
             viewModel.fetchMainProfile {
                 viewModel.sendLoginLog(it, attemptedEmail)
-                val intent = Intent(this, MainActivity::class.java)
+                // 교육청(AIEP)·웨일스페이스 사용자는 네이티브 Main 대신 WebView로 webapp을 사용한다
+                val intent = if (it.signInChannel.usesWebApp) {
+                    AiepWebViewActivity.webAppIntent(this)
+                } else {
+                    Intent(this, MainActivity::class.java)
+                }
                 startActivity(intent)
                 finishAffinity()
             }
