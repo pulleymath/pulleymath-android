@@ -788,6 +788,18 @@ fun android.webkit.WebView.autoCloseOnChatBotExit(onExit: () -> Unit) {
         }
     }
 }
+
+/**
+ * 웹뷰의 console.log/warn/error 등을 Logcat으로 그대로 노출시켜 안드로이드 스튜디오에서 확인할 수 있게 한다.
+ */
+fun android.webkit.WebView.enableConsoleLogging(tag: String = "WebView_Console") {
+    webChromeClient = object : android.webkit.WebChromeClient() {
+        override fun onConsoleMessage(consoleMessage: android.webkit.ConsoleMessage): Boolean {
+            android.util.Log.d(tag, "[${consoleMessage.sourceId()}:${consoleMessage.lineNumber()}] ${consoleMessage.message()}")
+            return true
+        }
+    }
+}
 fun View.visibleOrInvisibleIf(isVisible: Boolean) {
     this.visibility = if(isVisible) View.VISIBLE else View.INVISIBLE
 }

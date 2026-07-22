@@ -833,6 +833,7 @@ class SolveActivity : BaseActivity(),
                     }
                 }
                 it.autoCloseOnChatBotExit(onClose)
+                it.enableConsoleLogging()
                 val onMemoExist: () -> Boolean = {
                     viewModel.alreadyHaveMemoOnThisProblem || viewModel.isMemoDrawAStrokeAtLeastOnceAsProblem
                 }

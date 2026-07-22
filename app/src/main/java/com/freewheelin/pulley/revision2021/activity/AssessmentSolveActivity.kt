@@ -458,6 +458,7 @@ class AssessmentSolveActivity : AppCompatActivity(),
                     }
                 }
                 it.autoCloseOnChatBotExit(onClose)
+                it.enableConsoleLogging()
                 val onMemoExist: () -> Boolean = {
                     viewModel.isMemoSavedImageOrStrokeExist
                 }

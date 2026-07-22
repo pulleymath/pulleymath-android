@@ -11,28 +11,25 @@ import android.os.Vibrator
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.webkit.WebView
-import com.freewheelin.pulley.BuildConfig
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.Lifecycle
 import com.freewheelin.pulley.R
-//import com.facebook.drawee.backends.pipeline.Fresco
-//import com.facebook.imagepipeline.core.ImagePipelineConfig
 import com.freewheelin.pulley.legacy.core.manage.AppUsageMonitor
 import com.freewheelin.pulley.legacy.core.manage.ConceptLearningUsageMonitor
 import com.freewheelin.pulley.legacy.core.manage.VersionInfo
-import com.freewheelin.pulley.legacy.model.User
 import com.freewheelin.pulley.legacy.model.UserV4
+import com.freewheelin.pulley.legacy.utils.APHelper
+import com.freewheelin.pulley.legacy.utils.APPreference
+import com.freewheelin.pulley.legacy.utils.LogUtils
+import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.revision2023.SchoolType
-import com.freewheelin.pulley.revision2023.viewmodel.AppViewModel
-import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.model.AssessmentDesignSkin
+import com.freewheelin.pulley.revision2023.viewmodel.AppViewModel
 import com.google.gson.Gson
-//import dagger.hilt.android.HiltAndroidApp
-//import io.realm.Realm
 import net.danlew.android.joda.JodaTimeAndroid
 
 //@HiltAndroidApp

@@ -15,6 +15,7 @@ import com.freewheelin.pulley.legacy.utils.DateTimeUtils
 import com.freewheelin.pulley.legacy.utils.DialogType
 import com.freewheelin.pulley.legacy.utils.DialogUtils
 import com.freewheelin.pulley.legacy.utils.Preferences
+import com.freewheelin.pulley.revision2021.repository.remote.Network
 import com.google.gson.Gson
 import org.jsoup.Jsoup
 import retrofit2.Call
