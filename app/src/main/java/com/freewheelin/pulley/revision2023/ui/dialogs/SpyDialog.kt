@@ -40,6 +40,7 @@ import com.freewheelin.pulley.legacy.utils.Preferences
 import com.freewheelin.pulley.legacy.utils.toPx
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import com.freewheelin.pulley.revision2021.repository.remote.Network
+import com.freewheelin.pulley.revision2023.ui.activity.AiepWebViewActivity
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 import com.freewheelin.pulley.revision2023.ui.view.SpyItemView
 import com.freewheelin.pulley.revision2023.utils.StringUtils
@@ -65,6 +66,7 @@ enum class SpyItem(val description: String, val isSwitch: Boolean = false) {
 
     ShowEventLogging("이벤트 로깅 보이기", true),
 //    SHOW_UPDATE_DIALOG("강제업데이트 UI확인하기"),
+    OpenAiepWebView("AIEP 웹뷰 열기"),
     OffSpyMode("SPY 종료")
 }
 class SpyDialog(): DialogFragment() {
@@ -98,6 +100,7 @@ class SpyDialog(): DialogFragment() {
         SpyItem.ClearTests,
         SpyItem.ClearAllScrapHistory,
         SpyItem.ShowEventLogging,
+        SpyItem.OpenAiepWebView,
         SpyItem.OffSpyMode
     )
 
@@ -201,6 +204,10 @@ class SpyDialog(): DialogFragment() {
                             }
                             SpyItem.ShowEventLogging -> {
                                 Preferences.onLoggingEvent.set(!Preferences.onLoggingEvent.get())
+                            }
+                            SpyItem.OpenAiepWebView -> {
+                                dismiss()
+                                startActivity(AiepWebViewActivity.webAppIntent(requireContext()))
                             }
                             SpyItem.OffSpyMode -> {
                                 DialogUtils.DaebakDialog(requireContext()).apply {

@@ -178,15 +178,16 @@ class MainActivity : PermissionActivity(),
     }
 
     private fun applyEdgeToEdgeInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.rootDl) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.rootDl) { _, insets ->
             val bars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
                         or WindowInsetsCompat.Type.displayCutout()
                         or WindowInsetsCompat.Type.ime()
             )
-            v.updatePadding(left = bars.left, right = bars.right, bottom = bars.bottom)
-            binding.rootCl.updatePadding(top = bars.top)
-            binding.drawerContainerFl.updatePadding(top = bars.top)
+            binding.rootCl.updatePadding(top = bars.top, bottom = bars.bottom)
+            binding.headerCl.updatePadding(left = bars.left, right = bars.right)
+            binding.vp.updatePadding(left = bars.left, right = bars.right)
+            binding.drawerContainerFl.updatePadding(top = bars.top, right = bars.right, bottom = bars.bottom)
             insets
         }
     }
