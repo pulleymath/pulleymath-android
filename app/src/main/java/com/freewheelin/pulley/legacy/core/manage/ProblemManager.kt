@@ -15,8 +15,8 @@ import com.freewheelin.pulley.legacy.utils.responseError
 import com.freewheelin.pulley.legacy.utils.responseFailed
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -139,7 +139,7 @@ object ProblemManager {
 
 
     fun clearAllScrap(context: Context, user: UserV4, cb:(() -> Unit)) {
-        val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
+        val body = user.studentID.toRequestBody("application/json".toMediaType())
         API_V1.clearAllScrap(body).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 responseFailed(context, t)
@@ -158,7 +158,7 @@ object ProblemManager {
     }
 
     fun clearAllClear(context: Context, user: UserV4, cb: (() -> Unit)) {
-        val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
+        val body = user.studentID.toRequestBody("application/json".toMediaType())
         API_V1.clearAllClear(body).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 responseFailed(context, t)
@@ -177,7 +177,7 @@ object ProblemManager {
     }
 
     fun clearAllScoring(context: Context, user: UserV4, cb:(() -> Unit)) {
-        val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
+        val body = user.studentID.toRequestBody("application/json".toMediaType())
         API_V1.clearAllScroing(body).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 responseFailed(context, t)

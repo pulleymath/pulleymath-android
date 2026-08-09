@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import com.pulleymath.android.pdf.utils.getImageToByteArray
 import com.pulleymath.android.pdf.utils.toBitmap
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 /**
  * Created by Riccardo on 23/05/2017.
@@ -46,14 +46,15 @@ object FileHelper {
                 updated_at = updatedAt
             )
 
-            var fileByteArray: ByteArray? = ByteArray(0)
-            val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileByteArray)
+            val fileByteArray = ByteArray(0)
+            val multipartMediaType = "multipart/form-data".toMediaType()
+            val requestFile = fileByteArray.toRequestBody(multipartMediaType)
             val body = MultipartBody.Part.createFormData("image", "memo", requestFile)
-            val id = RequestBody.create(MediaType.parse("multipart/form-data"), fileName)
-            val student_id = RequestBody.create(MediaType.parse("multipart/form-data"), studentId)
-            val page_no = RequestBody.create(MediaType.parse("multipart/form-data"), pageNo.toString())
-            val pdf_id = RequestBody.create(MediaType.parse("multipart/form-data"), pdfId.toString())
-            val updated_at = RequestBody.create(MediaType.parse("multipart/form-data"), updatedAt.toString())
+            val id = fileName.toRequestBody(multipartMediaType)
+            val student_id = studentId.toRequestBody(multipartMediaType)
+            val page_no = pageNo.toString().toRequestBody(multipartMediaType)
+            val pdf_id = pdfId.toString().toRequestBody(multipartMediaType)
+            val updated_at = updatedAt.toString().toRequestBody(multipartMediaType)
 
             db.pdfWritingDao().delete(memo!!)
             Network.uploadTestMemo(body, id, student_id, pdf_id, updated_at, page_no) {}
@@ -101,7 +102,7 @@ object FileHelper {
     fun saveImagedMemo(context: Context, fileName: String, view: View) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                var fileByteArray: ByteArray? = view.getImageToByteArray()
+                val fileByteArray = view.getImageToByteArray() ?: return@launch
 
                 val db = DatabaseHelper.get(context)
                 val valueArray = fileName.split("_")
@@ -110,7 +111,7 @@ object FileHelper {
                 val pageNo = valueArray[3].toInt()
                 val updatedAt = System.currentTimeMillis()
 
-                var fileB64: String? = Base64.encodeToString(fileByteArray, Base64.DEFAULT)
+                val fileB64 = Base64.encodeToString(fileByteArray, Base64.DEFAULT)
                 var memo:PdfMemo? = PdfMemo(
                     id = fileName,
                     student_id = studentId,
@@ -120,18 +121,17 @@ object FileHelper {
                     updated_at = updatedAt
                 )
 
-                val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileByteArray)
+                val multipartMediaType = "multipart/form-data".toMediaType()
+                val requestFile = fileByteArray.toRequestBody(multipartMediaType)
                 val body = MultipartBody.Part.createFormData("image", "memo", requestFile)
-                val id = RequestBody.create(MediaType.parse("multipart/form-data"), fileName)
-                val student_id = RequestBody.create(MediaType.parse("multipart/form-data"), studentId)
-                val page_no = RequestBody.create(MediaType.parse("multipart/form-data"), pageNo.toString())
-                val pdf_id = RequestBody.create(MediaType.parse("multipart/form-data"), pdfId.toString())
-                val updated_at = RequestBody.create(MediaType.parse("multipart/form-data"), updatedAt.toString())
+                val id = fileName.toRequestBody(multipartMediaType)
+                val student_id = studentId.toRequestBody(multipartMediaType)
+                val page_no = pageNo.toString().toRequestBody(multipartMediaType)
+                val pdf_id = pdfId.toString().toRequestBody(multipartMediaType)
+                val updated_at = updatedAt.toString().toRequestBody(multipartMediaType)
 
                 db.pdfWritingDao().upsert(listOf(memo!!))
                 Network.uploadTestMemo(body, id, student_id, pdf_id, updated_at, page_no) {
-                    fileByteArray = null
-                    fileB64 = null
                 }
 
             } catch (e:OutOfMemoryError) {

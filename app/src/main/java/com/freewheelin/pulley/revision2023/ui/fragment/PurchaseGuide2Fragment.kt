@@ -23,9 +23,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.adapter.PurchaseGuideAdapter
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
+import com.google.firebase.Firebase
 
 class PurchaseGuide2Fragment : Fragment() {
     private lateinit var binding: FragmentPurchaseGuide2Binding

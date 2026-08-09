@@ -3,7 +3,6 @@ package com.freewheelin.pulley.legacy.utils
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
-import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Context
@@ -25,7 +24,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.freewheelin.pulley.R
@@ -809,31 +807,6 @@ fun View.visibleAnimIf(isVisible: Boolean) {
     } else {
         this.hide()
     }
-}
-fun ViewPager2.setCurrentItem(
-    item: Int,
-    duration: Long,
-    interpolator: TimeInterpolator = AccelerateDecelerateInterpolator(),
-    pagePxWidth: Int = width // Default value taken from getWidth() from ViewPager2 view
-) {
-    val pxToDrag: Int = pagePxWidth * (item - currentItem)
-    val animator = ValueAnimator.ofInt(0, pxToDrag)
-    var previousValue = 0
-    animator.addUpdateListener { valueAnimator ->
-        val currentValue = valueAnimator.animatedValue as Int
-        val currentPxToDrag = (currentValue - previousValue).toFloat()
-        fakeDragBy(-currentPxToDrag)
-        previousValue = currentValue
-    }
-    animator.addListener(object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator) { beginFakeDrag() }
-        override fun onAnimationEnd(animation: Animator) { endFakeDrag() }
-        override fun onAnimationCancel(animation: Animator) { /* Ignored */ }
-        override fun onAnimationRepeat(animation: Animator) { /* Ignored */ }
-    })
-    animator.interpolator = interpolator
-    animator.duration = duration
-    animator.start()
 }
 var originHeightForSlide = HashMap<Int, Int>()
 fun View.showExpandVertical(isShow: Boolean, startCallback: () -> Unit = {}, endCallback: () -> Unit = {}) {

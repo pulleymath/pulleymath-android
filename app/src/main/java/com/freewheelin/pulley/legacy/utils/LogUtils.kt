@@ -12,7 +12,7 @@ import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.core.manage.VersionManager
 import com.freewheelin.pulley.legacy.model.UserV4
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.logEvent
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import retrofit2.Call
 import retrofit2.Callback

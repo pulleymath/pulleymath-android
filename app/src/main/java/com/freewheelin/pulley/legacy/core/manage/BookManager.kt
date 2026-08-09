@@ -23,8 +23,8 @@ import com.freewheelin.pulley.legacy.utils.LogUtils
 import com.freewheelin.pulley.legacy.utils.PulleyEvent
 import com.freewheelin.pulley.legacy.utils.responseError
 import com.freewheelin.pulley.legacy.utils.responseFailed
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -224,7 +224,7 @@ object BookManager {
         })
     }
     fun clearBooks(context: Context, user: UserV4, cb: (() -> Unit)) {
-        val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
+        val body = user.studentID.toRequestBody("application/json".toMediaType())
         API_V1.clearAllBooks(body).enqueue(object: Callback<Template<Map<String, String>>> {
             override fun onFailure(call: Call<Template<Map<String, String>>>, t: Throwable) {
                 responseFailed(context, t)

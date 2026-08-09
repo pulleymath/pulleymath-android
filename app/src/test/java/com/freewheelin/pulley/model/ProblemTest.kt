@@ -1,6 +1,7 @@
 package com.freewheelin.pulley.legacy.model
 
 import com.google.gson.Gson
+import com.freewheelin.pulley.revision2023.model.StudyCategoryEnum
 import org.junit.Test
 import org.junit.Assert.assertEquals
 
@@ -38,7 +39,7 @@ class ProblemTest {
         assertEquals(ProblemType.single, problem.problemType)
         assertEquals(1, problem.problemNum)
         assertEquals(0.36f, problem.correctRate)
-        assertEquals("ORIGIN", problem.rawCategory)
+        assertEquals(StudyCategoryEnum.ORIGIN, problem.rawCategory)
         assertEquals(false, problem.isClear)
         assertEquals(true, problem.isScrap)
     }

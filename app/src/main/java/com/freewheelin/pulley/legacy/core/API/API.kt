@@ -110,16 +110,16 @@ fun retrofit(apiVersion: Version): Retrofit {
                     Log.d("인증", "Authorization=$authorization")
 
 
-                    val path = chain.request().url().encodedPath()
+                    val path = chain.request().url.encodedPath
 
-                    Log.d(javaClass.simpleName, "Api path=${path}, code=${response.code()}")
+                    Log.d(javaClass.simpleName, "Api path=${path}, code=${response.code}")
 
                     // 401 시 세션 만료 처리
                     var exceptionUrl = listOf("/v3/me/app", "/v2/versions/android", "/v2/signin/app", "/log/user", "/v2/daily/study-time")
 
-                    if(response.code() == 401 && !exceptionUrl.contains(path)) {
+                    if(response.code == 401 && !exceptionUrl.contains(path)) {
 
-                        Log.d(javaClass.simpleName, "Api path=${path}, code=${response.code()}")
+                        Log.d(javaClass.simpleName, "Api path=${path}, code=${response.code}")
                         Log.d(javaClass.simpleName, "Api path referActivity=${MainActivity.referActivity}")
 
                         MainActivity.referActivity?.run {

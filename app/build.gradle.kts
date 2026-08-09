@@ -31,8 +31,8 @@ android {
         applicationId = "com.freewheelin.pulley"
         minSdk = 25
         targetSdk = 36
-        versionCode = 572
-        versionName = "1.6.152"
+        versionCode = 573
+        versionName = "1.6.153"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -40,7 +40,6 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            isRenderscriptDebuggable = true
             signingConfig = signingConfigs.getByName("release")
         }
 
@@ -178,7 +177,6 @@ dependencies {
     implementation(libs.jsoup)
 
     //paging ktx
-    val paging_version = "3.1.1"
     implementation(libs.androidx.paging.runtime.ktx)
     testImplementation(libs.androidx.paging.common.ktx)
     implementation(libs.androidx.paging.rxjava2.ktx)
@@ -210,18 +208,17 @@ dependencies {
 
 
     testImplementation("junit:junit:4.13.2")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
-    testImplementation("org.mockito:mockito-core:3.9.0")
-    testImplementation("androidx.test:core:1.5.0")
-    testImplementation("org.robolectric:robolectric:4.1")
-    testImplementation("joda-time:joda-time:2.10.1")
-    testImplementation("org.mockito:mockito-inline:2.13.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.4")
+    testImplementation("org.mockito:mockito-core:5.14.2")
+    testImplementation("androidx.test:core:1.6.1")
+    testImplementation("org.robolectric:robolectric:4.14.1")
+    testImplementation("joda-time:joda-time:2.12.7")
 
-    androidTestImplementation("androidx.test:rules:1.5.0")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
 
     debugImplementation("com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:v1.0.6")
 }

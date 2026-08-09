@@ -12,8 +12,8 @@ import com.freewheelin.pulley.legacy.model.*
 import com.freewheelin.pulley.legacy.model.contents.Test
 import com.freewheelin.pulley.legacy.utils.responseError
 import com.freewheelin.pulley.legacy.utils.responseFailed
-import okhttp3.MediaType
-import okhttp3.RequestBody
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -212,7 +212,7 @@ object TestManager {
     }
 
     fun clearTests(context: Context, user: UserV4, cb: (() -> Unit)) {
-        val body = RequestBody.create(MediaType.parse("application/json"), user.studentID)
+        val body = user.studentID.toRequestBody("application/json".toMediaType())
 
         API_V1.clearAllTest(body).enqueue(object: Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {

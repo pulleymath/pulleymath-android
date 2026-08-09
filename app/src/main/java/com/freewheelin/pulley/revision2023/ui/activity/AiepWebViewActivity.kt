@@ -379,7 +379,7 @@ class AiepWebViewActivity : AppCompatActivity() {
 
     private fun putFcmToken() {
         if (MyApplication.token?.isNotEmpty() == true) {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener { task ->
                 val token = task.result
                 if (task.isSuccessful && token?.isNotEmpty() == true) {
                     viewModel.putFcmToken(token)

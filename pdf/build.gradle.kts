@@ -92,9 +92,6 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
 
-    // TOML에 없으므로 유지
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
-
     // Test (버전 명시 및 업데이트 됨)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

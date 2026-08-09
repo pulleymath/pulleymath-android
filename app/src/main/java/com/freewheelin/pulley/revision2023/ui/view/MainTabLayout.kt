@@ -51,22 +51,14 @@ enum class MainTab(val indexOnTablet: Int, val indexOnMobile: Int, val names: Li
 //    오답노트(5 ,5, listOf("오답노트")),
 
     분석(3, 3, listOf("분석")),
-    과외(4, -1, listOf("과외, 튜터")),
+    과외(4, -1, listOf("과외", "튜터")),
 //    대학(5, 4, listOf("진단", "SSU진단", "KU진단", "JNE진단"));
-    대학(5, 4, AssessmentDesignSkin.univTabTextList());
+    대학(5, 4, listOf("대학") + AssessmentDesignSkin.univTabTextList());
+
+    /** 기기 종류에 따른 탭 인덱스. 해당 기기에 없는 탭은 -1. */
+    fun indexOn(isTablet: Boolean): Int = if (isTablet) indexOnTablet else indexOnMobile
 
     companion object {
-        fun convertMainTab(value: String): MainTab {
-            return when (value) {
-                메인.name -> 메인
-                개념.name -> 개념
-                문제풀이.name -> 문제풀이
-                분석.name -> 분석
-                과외.name -> 과외
-                대학.name -> 대학
-                else -> 메인
-            }
-        }
         fun convertIndexToMainTab(isTablet: Boolean, index: Int): MainTab {
             return if (isTablet) {
                 when (index) {
@@ -158,15 +150,14 @@ class MainTabLayout: FrameLayout {
 
     fun setTabClickListener(view: View, index: Int) {
         (view as? TextView)?.let {
-            val newTabType = getTabType(it)
+            // 탭 타입은 반드시 자식 인덱스로 판별한다.
+            // 표시 텍스트는 런타임에 바뀌므로(과외→튜터, 대학→SSU진단 등) 텍스트로 판별하면
+            // 이름이 바뀐 탭이 매칭에 실패해 엉뚱한 탭(메인)으로 이동한다.
+            val newTabType = getTabByIndex(index)
             view.setOnClickListener {
                 onTabClick(index, newTabType, prevPosition, prevTabType)
             }
         }
-    }
-
-    private fun getTabType(tv: TextView): MainTab {
-        return MainTab.convertMainTab(tv.text.toString())
     }
 
     fun selectTap(index: Int, tab: MainTab) {

@@ -131,7 +131,7 @@ class MainActViewModel(application: Application) : BaseAndroidViewModel(applicat
     }
     fun putFcmToken() {
         if(MyApplication.token?.isNotEmpty() == true) {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     return@OnCompleteListener
                 }

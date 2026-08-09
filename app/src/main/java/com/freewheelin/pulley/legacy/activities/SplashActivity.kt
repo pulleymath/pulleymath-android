@@ -392,7 +392,7 @@ class SplashActivity : BaseActivity(), InstallStateUpdatedListener {
 
     fun putFcmToken(user: UserV4?) {
         if(user?.token?.isNotEmpty() == true) {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     return@OnCompleteListener
                 }

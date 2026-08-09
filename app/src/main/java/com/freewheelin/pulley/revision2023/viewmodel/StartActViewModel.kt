@@ -60,7 +60,7 @@ class StartActViewModel(application: Application) : BaseAndroidViewModel(applica
     }
 
     private fun getFcmToken(cb: (String) -> Unit) {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 return@OnCompleteListener
             }

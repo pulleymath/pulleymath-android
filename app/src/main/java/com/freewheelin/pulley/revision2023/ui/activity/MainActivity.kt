@@ -249,14 +249,18 @@ class MainActivity : PermissionActivity(),
             })
             mainTl.addOnTabListener { position, newType, prevPosition, prevType ->
                 viewModel.prevTab = Pair(prevType, prevPosition)
+                // 탭 이동은 ViewPager2 기본 API만 사용한다.
+                // fakeDrag 기반 커스텀 애니메이션(setCurrentItem(item, duration))은 페이지 폭을
+                // vp.width로 계산하기 때문에, vp에 좌우 padding(노치/내비게이션바 인셋)이 붙는
+                // 모바일에서는 드래그 거리가 페이지 폭보다 커져서 의도한 탭이 아닌 옆 탭으로 안착한다.
                 when (newType) {
                     MainTab.메인 -> {
 //                        checkStartChallengeFinish()
-                        vp.setCurrentItem(position, 200)
+                        vp.setCurrentItem(position, true)
                     }
                     MainTab.과외 -> openLesson()
                     else -> {
-                        vp.setCurrentItem(position, 200)
+                        vp.setCurrentItem(position, true)
                     }
                 }
                 CoroutineScope(Dispatchers.Main).launch {
@@ -555,8 +559,8 @@ class MainActivity : PermissionActivity(),
                                 }
                             }
                         }
-                        6 -> {
-                            (tabFragments[tabIndex] as AnalysisFragment).setTodayStudyNewOne()
+                        MainTab.분석.indexOn(isTablet) -> {
+                            (tabFragments.getOrNull(tabIndex) as? AnalysisFragment)?.setTodayStudyNewOne()
                         }
                     }
 
@@ -849,7 +853,7 @@ class MainActivity : PermissionActivity(),
             override fun onActionBtnClicked(view: SnackBarView) {
                 if (action == null) {
                     val intent = Intent(PieceManager.EVENT_MOVE_TAB)
-                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, 6)
+                    intent.putExtra(PieceManager.EVENT_MOVE_TAB_INDEX, MainTab.분석.indexOn(isTablet))
                     LocalBroadcastManager.getInstance(baseContext).sendBroadcast(intent)
                 } else {
                     action()
@@ -1023,8 +1027,8 @@ class MainActivity : PermissionActivity(),
             return super.onKeyDown(keyCode, event)
         }
 
-        val tabIndex = if (isTablet) MainTab.대학.indexOnTablet else MainTab.대학.indexOnMobile
-        (tabFragments[tabIndex] as? AssessmentFragment)?.let { frag ->
+        val tabIndex = MainTab.대학.indexOn(isTablet)
+        (tabFragments.getOrNull(tabIndex) as? AssessmentFragment)?.let { frag ->
             val binding = frag.binding
 
             println("host check =========> ${binding.webView.url}")

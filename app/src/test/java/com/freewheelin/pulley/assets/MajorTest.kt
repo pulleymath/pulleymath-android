@@ -15,6 +15,6 @@ class MajorTest {
         Assert.assertEquals(Major.common, Major.init("U"))
         Assert.assertEquals(Major.liberal_arts, Major.init("A"))
         Assert.assertEquals(Major.natural_sciences, Major.init("B"))
-        Assert.assertEquals(Major.liberal_arts, Major.init("Bawefaefafe"))
+        Assert.assertEquals(Major.none, Major.init("Bawefaefafe"))
     }
 }
