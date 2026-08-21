@@ -26,8 +26,8 @@ class ServerInspectionDialog(activity: Activity, val status: ServerStatus): Dial
     }
 
     private fun initUI(activity: Activity) {
-        val startDate = dateParsingToGoodWordWithYear(status.checkStart)
-        val endDate = dateParsingToGoodWordWithoutYear(status.endStart)
+        val startDate = dateParsingToGoodWordWithYear(status.startDate)
+        val endDate = dateParsingToGoodWordWithoutYear(status.endDate)
         binding.dialogInfomationTv.text = "점검시간\n$startDate ~ $endDate"
         binding.inspectionTextBtn.setOnClickListener {
             dismiss()

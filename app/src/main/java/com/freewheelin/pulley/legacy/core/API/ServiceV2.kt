@@ -25,7 +25,6 @@ import com.freewheelin.pulley.legacy.core.Parameter
 import com.freewheelin.pulley.legacy.core.manage.ResponseBookInfo
 import com.freewheelin.pulley.legacy.core.manage.ResponseBookInfo2
 import com.freewheelin.pulley.legacy.core.manage.ResponseBookList
-import com.freewheelin.pulley.legacy.core.manage.VersionInfo
 import com.freewheelin.pulley.legacy.model.Problem
 import com.freewheelin.pulley.legacy.model.ResponseBody
 import com.freewheelin.pulley.legacy.model.ResponseForceBody
@@ -243,9 +242,6 @@ interface  ServiceV2 {
 
     @POST("problems/similar")
     fun getSimilarProblem(@Body param :Parameter): Call<Template<Problem>>
-
-    @GET("versions/android")
-    fun getAndroidVersionInfo(): Call<Template<VersionInfo>>
 
     @POST("signin/app")
     fun loginApp(@Body params: RequestLogin): Call<Template<User?>>

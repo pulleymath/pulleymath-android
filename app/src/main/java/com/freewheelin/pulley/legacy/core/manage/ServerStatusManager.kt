@@ -49,11 +49,12 @@ object ServerStatusManager {
     }
 
     private fun isServerUnderInspection(status: ServerStatus): Boolean {
+        if (status.enabled == "false") return false
         val tz = TimeZone.getTimeZone("Asia/Seoul")
         sdf.timeZone = tz
         val current = sdf.format(System.currentTimeMillis())
-        val startDate = status.checkStart
-        val endDate = status.endStart
+        val startDate = status.startDate
+        val endDate = status.endDate
         val isServerUnderInspection = current <= endDate && current >= startDate
         return isServerUnderInspection
     }
