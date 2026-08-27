@@ -27,11 +27,8 @@ object URL {
     val PULLEY_API = "https://api-live.pulleymath.com"
     val PULLEY_STAGING_API = "https://api-staging.pulleymath.com"
 //    val PULLEY_API = "https://api-dev.pulleymath.com"
-    val SERVER_INSPECTION = "https://pulley-common.s3.ap-northeast-2.amazonaws.com/server_inspection/server_inspection.json"
+    val SERVER_INSPECTION = "https://asset.pulleycampus.com/maintenance/prod.json"
     val STAGING_SERVER_INSPECTION = "https://asset.pulleycampus.com/maintenance/stg.json"
-
-//    val SERVER_INSPECTION = "https://asset.pulleycampus.com/maintenance/prod.json"
-//    val STAGING_SERVER_INSPECTION = "https://pulley-new-bucket.s3.ap-northeast-2.amazonaws.com/server_inspection/server_inspection_android_staging.json"
 
 
     val ANDROID_VERSION = "https://asset.pulleycampus.com/mobile_app/android/android_version.json"

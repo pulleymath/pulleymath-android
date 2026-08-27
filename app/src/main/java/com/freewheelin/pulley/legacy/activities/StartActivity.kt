@@ -12,8 +12,6 @@ import android.widget.LinearLayout
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.auth.login.LoginActivity
 import com.freewheelin.pulley.legacy.activities.auth.signup.SignupActivity
@@ -26,7 +24,7 @@ import com.freewheelin.pulley.revision2023.viewmodel.StartActViewModel
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.revision2023.ui.activity.MainActivity
 
-class StartActivity : BaseActivity(), LifecycleObserver {
+class StartActivity : BaseActivity() {
     private val binding: ActivityStartBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_start,null,false)
     }
@@ -47,13 +45,7 @@ class StartActivity : BaseActivity(), LifecycleObserver {
         setContentView(binding.root)
 
         initUI()
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         addBackPressed()
-    }
-
-    override fun onDestroy() {
-        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
-        super.onDestroy()
     }
 
     fun onGuestEnterBtnClicked() {
