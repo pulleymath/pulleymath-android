@@ -24,9 +24,8 @@ import androidx.appcompat.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
@@ -79,7 +78,7 @@ class SolveActivity : BaseActivity(),
     PencilPanelListener,
     ProblemGestureListener,
     ObservableHashSetListener<Problem>,
-    LifecycleObserver,
+    DefaultLifecycleObserver,
     AppUsageMonitorListener,
     MemoListener,
     PathRedoUndoCountChangeListener {
@@ -165,7 +164,7 @@ class SolveActivity : BaseActivity(),
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super<BaseActivity>.onCreate(savedInstanceState)
 
         setContentView(binding.root)
         initReceiver()
@@ -196,19 +195,19 @@ class SolveActivity : BaseActivity(),
     }
     override fun onResume() {
         Log.d("문제풀기", "onResume()")
-        super.onResume()
+        super<BaseActivity>.onResume()
     }
 
     override fun onStop() {
         saveMemo()
         Log.d("문제풀기", "onStop()")
-        super.onStop()
+        super<BaseActivity>.onStop()
     }
 
     override fun onDestroy() {
         arg_piece_problems = null
         AppUsageMonitor.finishStudy(this)
-        super.onDestroy()
+        super<BaseActivity>.onDestroy()
         ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
         binding.timerView.deinitTimer()
 
@@ -1297,16 +1296,14 @@ class SolveActivity : BaseActivity(),
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onAppForeground() {
+    override fun onStart(owner: LifecycleOwner) {
         AppUsageMonitor.startStudy(this)
 //        VersionManager.requestVersionInfo(this) {
 //            handleUser()
 //        }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onAppBackground() {
+    override fun onStop(owner: LifecycleOwner) {
         AppUsageMonitor.finishStudy(this)
     }
     // 키보드로 입력시 주관식 정답 저장 안되는 현상

@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleObserver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.databinding.ActivityTestBinding
@@ -60,7 +59,7 @@ import java.util.HashSet
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
-class TestActivity : AppCompatActivity(), LifecycleObserver, TestMainBaseListener,
+class TestActivity : AppCompatActivity(), TestMainBaseListener,
     MyPageSettingDialogListener {
     val binding: ActivityTestBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_test, null, false)

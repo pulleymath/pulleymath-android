@@ -17,8 +17,6 @@ import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.OnLifecycleEvent
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.bases.BaseNavActivity
 import com.freewheelin.pulley.legacy.activities.learning.tabFragment.mockExam.MockExamFragment
@@ -196,19 +194,6 @@ class OMRActivity : BaseNavActivity(), NumberKeypadListener, OMRViewListener, So
                 super.onBackPressed()
             }
         )
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onAppForeground() {
-        AppUsageMonitor.startStudy(this)
-//        VersionManager.requestVersionInfo(this) {
-//            handleUser()
-//        }
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onAppBackground() {
-        AppUsageMonitor.finishStudy(this)
     }
 
     override fun onNumberBtnClicked(button: Button, text: String) {

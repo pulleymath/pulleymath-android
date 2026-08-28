@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleObserver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -66,7 +65,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PulleyMathBooksActivity : AppCompatActivity(), LifecycleObserver, PlanListenerV2,
+class PulleyMathBooksActivity : AppCompatActivity(), PlanListenerV2,
     EmailInputDialogListener {
 
     val binding: ActivityPulleyMathBooksBinding by lazy {

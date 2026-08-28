@@ -12,7 +12,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleObserver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -54,7 +53,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WorkbookListActivity : AppCompatActivity(), LifecycleObserver, PlanListenerV2,
+class WorkbookListActivity : AppCompatActivity(), PlanListenerV2,
     CustomizeBookDialogListener {
     val binding: ActivityWorkbookListBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_workbook_list, null, false)

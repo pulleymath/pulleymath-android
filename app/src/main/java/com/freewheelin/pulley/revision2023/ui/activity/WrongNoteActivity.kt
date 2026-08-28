@@ -15,7 +15,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -71,7 +70,7 @@ enum class OrderType(val rawValue: Int) {
     level(3)
 }
 
-class WrongNoteActivity : AppCompatActivity(), LifecycleObserver, NoteFilterChangeListener,
+class WrongNoteActivity : AppCompatActivity(), NoteFilterChangeListener,
     NoteStudyClickListener, NoteStudyViewListener {
     private val binding: ActivityWrongNoteBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_wrong_note, null, false)

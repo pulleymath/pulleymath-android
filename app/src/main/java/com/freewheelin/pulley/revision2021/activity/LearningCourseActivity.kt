@@ -18,7 +18,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
@@ -50,7 +49,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class LearningCourseActivity: BaseActivity(), LifecycleObserver,
+class LearningCourseActivity: BaseActivity(),
     PencilPanelListener {
 
     companion object {

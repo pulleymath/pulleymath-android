@@ -15,7 +15,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.freewheelin.pulley.R
@@ -42,7 +41,7 @@ interface MockTabListener {
 }
 
 
-class MockListActivity : AppCompatActivity(), LifecycleObserver, MockTabListener {
+class MockListActivity : AppCompatActivity(), MockTabListener {
     val binding: ActivityMockListBinding by lazy {
         DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_mock_list, null, false)
     }

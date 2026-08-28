@@ -28,7 +28,6 @@ import com.freewheelin.pulley.revision2023.utils.ChallengeGuideManager
 import com.freewheelin.pulley.legacy.utils.*
 import com.freewheelin.pulley.legacy.views.DaebakToast
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Lifecycle
@@ -69,7 +68,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 
-class MainFragment : MainTabFragment(), DDaySettingDialogListener, LifecycleObserver,
+class MainFragment : MainTabFragment(), DDaySettingDialogListener,
     LifecycleEventObserver {
 
     override var type: MainTab = MainTab.메인

@@ -17,8 +17,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.ProcessLifecycleOwner
 import com.freewheelin.pulley.BuildConfig
 import com.freewheelin.pulley.R
 import com.freewheelin.pulley.legacy.activities.auth.findEmailAndPw.FindEmailAndPwActivity
@@ -61,7 +59,7 @@ import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 
-class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterListener, PasswordFieldV2Listener, PasswordFieldV2EnterListener, LifecycleObserver {
+class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterListener, PasswordFieldV2Listener, PasswordFieldV2EnterListener {
 
     companion object {
 
@@ -138,7 +136,6 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
                 currentFocus?.let { hideKeyboard(it) }
                 false
             }
-            ProcessLifecycleOwner.get().lifecycle.addObserver(this@LoginActivity)
             loginBtn.isEnabled = false
 
             setListener()
@@ -242,11 +239,6 @@ class LoginActivity : BaseActivity(), InputFieldV2Listener, InputFieldV2EnterLis
             }
             return email.isValidEmail() && pw.length > 4
         }
-    }
-
-    override fun onDestroy() {
-        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
-        super.onDestroy()
     }
 
     var requested = false
